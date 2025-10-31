@@ -1,1 +1,43 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo "Checking out source code..."
+                checkout scm
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo "Building Docker image..."
+                script {
+                    docker.build("myapp:latest", "./myapp/infra")
+                }
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                echo "Running Docker container..."
+                script {
+                    sh "docker run -d -p 5000:5000 myapp:latest"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Cleaning up..."
+        }
+        success {
+            echo "Pipeline executed successfully ✅"
+        }
+        failure {
+            echo "Pipeline failed ❌"
+        }
+    }
+}
 
