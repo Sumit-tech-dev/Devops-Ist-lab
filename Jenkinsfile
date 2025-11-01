@@ -13,15 +13,16 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    sh 'docker build -t $DOCKER_HUB_USER/$DOCKER_HUB_APP:latest .'
-                }
-            }
+   stage('Build Docker Image') {
+    steps {
+        script {
+            sh 'docker build -t sumitsachdeva245/devops-lab:latest .'
         }
+    }
+}
 
-        stage('Push to Docker Hub') {
+        
+    stage('Push to Docker Hub') {
             steps {
                 script {
                     sh 'echo $DOCKER_HUB_PASS | docker login -u $DOCKER_HUB_USER --password-stdin'
@@ -29,7 +30,7 @@ pipeline {
                 }
             }
         }
-
+       
         stage('Deploy Container') {
             steps {
                 script {
